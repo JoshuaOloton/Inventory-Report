@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+
+<div class="container">
+  <h3>RECIEVED INVENTORY</h3>
+  <!-- <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>             -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ITEM</th>
+        <th>NO OF UNITS</th>
+        <th>DATE ADDED</th>
+        <th>DESCRIPTION</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for new in incoming %}
+      <tr>
+          <td>{{ new.item }}</td>
+          <td>{{ new.units }}</td>
+          <td>{{ new.date_added.strftime("%b-%d-%y") }}</td>
+          <td>{{ new.description | title }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.download', process='reimburse', filter=filter) }}">Download</a>
+  <!-- process value of disburse is passed to the download function to read the appopriate html table -->
+</div>
+
+
+<ul class="pagination">
+
+  {% if not pagination.has_prev %}
+    <li class="page-item disabled"><a class="page-link" href="{{ url_for('reimbursed.reimbursed_summary', page=pagination.prev_num) }}">&laquo;</a></li>
+  {% else %}
+    <li class="page-item" ><a class="page-link" href="{{ url_for('reimbursed.reimbursed_summary', page=pagination.prev_num) }}">&laquo;</a></li>
+  {% endif %}
+  
+
+  {% for page_no in pagination.iter_pages() %}
+    {% if page_no %}
+      {% if page_no == pagination.page %}
+        <li class="page-item active"><a class="page-link" href="{{ url_for('reimbursed.reimbursed_summary', page=page_no) }}">{{ page_no }}</a></li>
+      {% else %}
+        <li class="page-item" ><a class="page-link" href="{{ url_for('reimbursed.reimbursed_summary', page=page_no) }}">{{ page_no }}</a></li>
+      {% endif %}
+    {% else %}
+      &hellip;
+    {% endif %}
+  {% endfor %}
+
+  
+  {% if not pagination.has_next %}
+    <li class="page-item disabled"><a class="page-link" href="{{ url_for('reimbursed.reimbursed_summary', page=pagination.next_num) }}">&raquo;</a></li>
+  {% else %}
+    <li class="page-item" ><a class="page-link" href="{{ url_for('reimbursed.reimbursed_summary', page=pagination.next_num) }}">&raquo;</a></li>
+  {% endif %}
+</ul>
+
+{% endblock %}

@@ -17,11 +17,16 @@ text-decoration: none;
 }
 
 
+
 .navbar a:hover {
 background-color: rgb(86, 83, 83);
 }
 
 .report {
+  border-bottom: 1px solid #655d5d;
+}
+
+.period {
   border-bottom: 1px solid #655d5d;
 }
 

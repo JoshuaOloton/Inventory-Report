@@ -41,6 +41,7 @@
           <th>ITEM</th>
           <th>NO OF UNITS</th>
           <th>DATE ADDED</th>
+          <th>DESCRIPTION</th>
         </tr>
       </thead>
       <tbody>
@@ -49,10 +50,12 @@
             <td>{{ new.item }}</td>
             <td>{{ new.units }}</td>
             <td>{{ new.date_added.strftime("%b-%d-%y") }}</td>
+            <td>{{ new.description | title }}</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
+    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('reimbursed.reimbursed_summary') }}">View Full</a>
   </div>
 
 <div class="container">
@@ -73,11 +76,12 @@
             <td>{{ disbursed.item }}</td>
             <td>{{ disbursed.units }}</td>
             <td>{{ disbursed.date_disbursed.strftime("%b-%d-%y") }}</td>
-            <td>{{ disbursed.destination }}</td>
+            <td>{{ disbursed.destination | title }}</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
+    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('disbursed.disbursed_summary') }}">View Full</a>
   </div>
 
 

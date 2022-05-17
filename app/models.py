@@ -7,15 +7,17 @@ class NewInventory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     item = db.Column(db.String(20), nullable=False)
     units = db.Column(db.Integer, nullable=False)
-    date_added = db.Column(db.DateTime, default = datetime.utcnow)
+    date_added = db.Column(db.DateTime, default = datetime.now)
+    description = db.Column(db.Text)
 
 class DisbursedInventory(db.Model):
     __tablename__ = 'disbursed_inventory'
     id = db.Column(db.Integer, primary_key=True)
     item = db.Column(db.String(20), nullable=False)
     units = db.Column(db.Integer, nullable=False)
-    date_disbursed = db.Column(db.DateTime, default = datetime.utcnow)
+    date_disbursed = db.Column(db.DateTime, default = datetime.now)
     destination = db.Column(db.String(64), nullable=False)
+    description = db.Column(db.Text)
 
 class InStock(db.Model):
     __tablename__ = 'in_stock'

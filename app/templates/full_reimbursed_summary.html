@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+
+<div class="container">
+  <h3>RECIEVED INVENTORY</h3>
+  <!-- <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>             -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ITEM</th>
+        <th>NO OF UNITS</th>
+        <th>DATE ADDED</th>
+        <th>DESCRIPTION</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for new in incoming %}
+      <tr>
+          <td>{{ new.item }}</td>
+          <td>{{ new.units }}</td>
+          <td>{{ new.date_added.strftime("%b-%d-%y") }}</td>
+          <td>{{ new.description | title }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.download', process='reimburse', filter=filter) }}">Download</a>
+  <!-- process value of disburse is passed to the download function to read the appopriate html table -->
+</div>
+
+
+{% endblock %}
