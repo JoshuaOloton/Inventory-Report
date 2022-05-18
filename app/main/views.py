@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, session, flash, make_response, request
+from flask import render_template, redirect, url_for, session, flash, make_response, request, current_app
 from app.main import main
 from app.models import NewInventory, DisbursedInventory, InStock
 from app.main.forms import ChooseDateForm
@@ -40,6 +40,14 @@ def set_date():
         resp.set_cookie('end_date', end_date.strftime("%m-%d-%y"))
         return resp
     return render_template('set_date.html', form=form)
+
+
+@main.route('/report/summary', methods=['GET','POST'])
+def report_summary():
+    page = request.args.get('page', 1, type=int)
+    pagination = InStock.query.paginate(page, per_page=current_app.config['RECORDS_PER_PAGE'], error_out=False)
+    instock = pagination.items
+    return render_template('report_summary.html',pagination=pagination,instock=instock)
 
 
 @main.route('/report/period', methods=['GET','POST'])

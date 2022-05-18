@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+
+<div class="container report">
+    <h3>REPORT SUMMARY</h3>
+    <!-- <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>             -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ITEM</th>
+          <th>UNITS IN STOCK</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for stock in instock %}
+        <tr>
+            <td>{{ stock.item }}</td>
+            <td>
+                {% if stock.units == 0 %}
+                    Out of stock
+                {% elif stock.units == 1 %}
+                    {{ stock.units }} unit
+                {% else %}
+                    {{ stock.units }} units
+                {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('reimbursed.reimbursed_summary') }}">View Full</a>
+  </div>
+
+{% endblock %}

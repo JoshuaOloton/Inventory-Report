@@ -3,7 +3,8 @@
 {% block page_content %}
 
 <div class="container">
-    <h3>DISBURSED INVENTORY</h3>
+  <br>
+  <h3>DISBURSED INVENTORY</h3>
     <!-- <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>             -->
     <table class="table">
       <tr>
@@ -23,6 +24,7 @@
     </table>
     <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.download', process='disburse', filter=filter) }}">Download</a>
     <!-- process value of disburse is passed to the download function to read the appopriate html table -->
+    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('disbursed.disbursed_summary_full') }}">Search</a>
 </div>
 
 <ul class="pagination">
