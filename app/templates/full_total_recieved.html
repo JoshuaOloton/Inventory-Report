@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+
+<br>
+<div class="container">
+    <h4>TOTAL RECIEVED IN PERIOD</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ITEM</th>
+            <th>UNITS</th>
+          </tr>
+        </thead>
+        {% for new in incoming_dict.items() %}
+        <tr>
+          <td>{{ new[0] }}</td>
+          <td>{{ new[1] }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+  </div>
+
+{% endblock %}

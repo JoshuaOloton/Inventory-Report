@@ -10,6 +10,8 @@ class Config:
 class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = f'sqlite:///{basedir}/test-dev.db'
 
+    # SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:next23rd@localhost/inventorydb'
+
 
 config = {'Development': DevelopmentConfig,
 

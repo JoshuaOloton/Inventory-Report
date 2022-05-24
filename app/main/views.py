@@ -16,6 +16,8 @@ def report():
     outgoing = DisbursedInventory.query.all()
     instock = InStock.query.all()
     resp = make_response(render_template('report.html', incoming=incoming, outgoing=outgoing, instock=instock))
+
+    # clear start and end date cookies
     if request.cookies.get('start_date'):
         resp.set_cookie('start_date', '', 0)
     if request.cookies.get('end_date'):
@@ -47,7 +49,17 @@ def report_summary():
     page = request.args.get('page', 1, type=int)
     pagination = InStock.query.paginate(page, per_page=current_app.config['RECORDS_PER_PAGE'], error_out=False)
     instock = pagination.items
-    return render_template('report_summary.html',pagination=pagination,instock=instock)
+
+    # set cookie of current url that'll be used by the download function to download the appopriate table
+    resp = make_response(render_template('report_summary.html',pagination=pagination,instock=instock, filter=0))
+    resp.set_cookie('url', request.url)
+    return resp
+
+    
+@main.route('/report/summary/full', methods=['GET','POST'])
+def report_summary_full():
+    instock = InStock.query.all()
+    return render_template('full_report_summary.html', instock=instock)
 
 
 @main.route('/report/period', methods=['GET','POST'])
@@ -63,9 +75,6 @@ def report_period():
     start_date = datetime.strptime(start_date, format).date()
     end_date = datetime.strptime(end_date, format).date()
 
-    print(f"Start datee: {start_date}, type: {type(start_date)}")
-    print(f'End datee: {end_date}, type: {type(end_date)}')
-    
     # if both date limits are provided, filter between dates
     if start_date and end_date:
         if start_date > end_date:
@@ -107,26 +116,32 @@ def download(process, filter):
     root.withdraw() # hides small tkinter window
     root.attributes('-topmost', True)
 
-    base_url = 'http://127.0.0.1:5000'
+    # base_url = 'http://127.0.0.1:5000'
+    url = request.cookies.get('url')
     
     # these variables are used if filter is set to 1
-    start_date = request.cookies.get('start_date')
-    end_date = request.cookies.get('end_date')
+    # start_date = request.cookies.get('start_date')
+    # end_date = request.cookies.get('end_date')
+    print(f"URL: {url}")
     
-    if process == 'reimburse':
-        if filter == 0:
-            next_url = '/inventory/new/report/full'
-        else:
-            print(f'{start_date}///{type(start_date)}')
-            next_url = f'/inventory/new/report/full/{start_date}/{end_date}'
-            print(f'next url: {next_url}')
-    else:
-        if filter == 0:
-            next_url = '/inventory/disburse/report/full'
-        else:
-            next_url = f'/inventory/disburse/report/full/{start_date}/{end_date}'
+    # if process == 'reimburse':
+    #     if filter == 0:
+    #         next_url = '/inventory/new/report/full'
+    #     else:
+    #         next_url = f'/inventory/new/report/full/{start_date}/{end_date}'
+    # elif process == 'disburse':
+    #     if filter == 0:
+    #         next_url = '/inventory/disburse/report/full'
+    #     else:
+    #         next_url = f'/inventory/disburse/report/full/{start_date}/{end_date}'
+    # elif process == 'incoming':
+    #     next_url = f'/inventory/recieved/{start_date}/{end_date}/full'
+    # elif process == 'outgoing':
+    #     next_url = f'/inventory/disbursed/{start_date}/{end_date}/full'
+    # else: # report
+    #     next_url = '/report/summary/full'
 
-    table = pd.read_html(f'{base_url}{next_url}')[0]
+    table = pd.read_html(f'{url}/full')[0]
     filename = filedialog.asksaveasfile(defaultextension=".xlsx", 
                                         filetypes=[
                                             ("Excel File", ".xlsx"),
@@ -137,9 +152,11 @@ def download(process, filter):
         flash(f'{os.path.basename(filename.name)}  successfully downloaded!', 'success')
         root.destroy()
     except AttributeError:
-        return redirect(url_for('main.set_date'))
+        return redirect(url)
     # close file
-    filename.close()
     root.mainloop()
+    filename.close()
 
-    return redirect(url_for('main.report'))
+    resp = make_response(redirect(url_for('main.report')))
+    resp.set_cookie('url', '', 0)   # clear url cookie
+    return resp

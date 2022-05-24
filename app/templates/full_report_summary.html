@@ -2,10 +2,12 @@
 
 {% block page_content %}
 
-<div class="container report">
+<br>
+<div class="container">
     <h3>REPORT SUMMARY</h3>
     <!-- <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>             -->
-    <table class="table">
+    <input type="text" placeholder="Search Items" class="form-control search_item" onkeyup="myFunc()">
+    <table class="table myTable">
       <thead>
         <tr>
           <th>ITEM</th>
@@ -29,7 +31,6 @@
         {% endfor %}
       </tbody>
     </table>
-    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('reimbursed.reimbursed_summary') }}">View Full</a>
   </div>
 
 {% endblock %}

@@ -2,11 +2,29 @@
 
 {% block page_content %}
 
+<br>
 <div class="container">
   <h3>RECIEVED INVENTORY</h3>
-  <!-- <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>             -->
+
   <table class="table">
     <thead>
+      <tr>
+        {% if filter == 0 %}
+        <th colspan="2">
+          <a href="{{ url_for('reimbursed.reimbursed_summary_full') }}" style="text-decoration: none;"><input type="text" placeholder="Search Items" class="form-control"></a>
+        </th>
+        <th colspan="2">
+          <a href="{{ url_for('reimbursed.reimbursed_summary_full') }}" style="text-decoration: none;"><input type="text" placeholder="Search Description" class="form-control"></a>
+        </th>
+        {% else %}
+        <th colspan="2">
+          <a href="{{ url_for('reimbursed.reimbursed_summary_period_full', start_date=request.cookies.get('start_date'), end_date=request.cookies.get('end_date')) }}" style="text-decoration: none;"><input type="text" placeholder="Search Items" class="form-control"></a>
+        </th>
+        <th colspan="2">
+          <a href="{{ url_for('reimbursed.reimbursed_summary_period_full', start_date=request.cookies.get('start_date'), end_date=request.cookies.get('end_date')) }}" style="text-decoration: none;"><input type="text" placeholder="Search Description" class="form-control"></a>
+        </th>
+        {% endif %}
+      </tr>
       <tr>
         <th>ITEM</th>
         <th>NO OF UNITS</th>
@@ -27,7 +45,6 @@
   </table>
   <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.download', process='reimburse', filter=filter) }}">Download</a>
   <!-- process value of disburse is passed to the download function to read the appopriate html table -->
-  <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('reimbursed.reimbursed_summary_full') }}">Search</a>
 </div>
 
 
@@ -40,7 +57,7 @@
   {% endif %}
   
 
-  {% for page_no in pagination.iter_pages() %}
+  {% for page_no in pagination.iter_pages(left_edge=1,right_edge=1,left_current=2,right_current=2) %}
     {% if page_no %}
       {% if page_no == pagination.page %}
         <li class="page-item active"><a class="page-link" href="{{ url_for('reimbursed.reimbursed_summary', page=page_no) }}">{{ page_no }}</a></li>

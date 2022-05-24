@@ -9,7 +9,7 @@
     <table class="table">
       <thead>
         <tr>
-          <th>ITEM</th>
+          <th>ITEMS</th>
           <th>UNITS IN STOCK</th>
         </tr>
       </thead>
@@ -30,9 +30,10 @@
         {% endfor %}
       </tbody>
     </table>
-    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.download', process='reimburse', filter=filter) }}">Download</a>
+    
     <!-- process value of disburse is passed to the download function to read the appopriate html table -->
-    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('reimbursed.reimbursed_summary_full') }}">Search</a>
+    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.report_summary_full') }}">Search</a>
+    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.download', process='report', filter=filter) }}">Download</a>
   </div>
 
   <ul class="pagination">
@@ -44,7 +45,7 @@
     {% endif %}
     
   
-    {% for page_no in pagination.iter_pages() %}
+    {% for page_no in pagination.iter_pages(left_edge=1,right_edge=1,left_current=2,right_current=2) %}
       {% if page_no %}
         {% if page_no == pagination.page %}
           <li class="page-item active"><a class="page-link" href="{{ url_for('main.report_summary', page=page_no) }}">{{ page_no }}</a></li>

@@ -2,10 +2,11 @@
 
 {% block page_content %}
 
+<br>
 <div class="container report">
     <h3>REPORT SUMMARY</h3>
     <!-- <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>             -->
-    <table class="table">
+    <table class="table test">
       <thead>
         <tr>
           <th>ITEM</th>
@@ -29,14 +30,14 @@
         {% endfor %}
       </tbody>
     </table>
-    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.report_summary') }}">View Full</a>
+    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.report_summary') }}">View</a>
   </div>
 
 <br>
 <div class="container">
     <h3>RECIEVED INVENTORY</h3>
     <!-- <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>             -->
-    <table class="table" id="test">
+    <table class="table test">
       <thead>
         <tr>
           <th>ITEMS</th>
@@ -56,13 +57,13 @@
         {% endfor %}
       </tbody>
     </table>
-    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('reimbursed.reimbursed_summary') }}">View Full</a>
+    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('reimbursed.reimbursed_summary') }}">View</a>
   </div>
 
 <div class="container">
     <h3>DISBURSED INVENTORY</h3>
     <!-- <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>             -->
-    <table class="table">
+    <table class="table test">
       <thead>
         <tr>
           <th>ITEM</th>
@@ -82,7 +83,7 @@
         {% endfor %}
       </tbody>
     </table>
-    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('disbursed.disbursed_summary') }}">View Full</a>
+    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('disbursed.disbursed_summary') }}">View</a>
   </div>
 
 
