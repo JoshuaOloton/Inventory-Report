@@ -9,51 +9,55 @@
     <!-- passing an empty string to the action attribute redirects the form back to the same route -->
     <form action="" method="POST">
         {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <legend class="border-bottom">New Inventory</legend>
-            <div class="form-group">
-                {{ form.item.label(class="form-control-label") }}
-                {% if form.item.errors %}
-                    {{ form.item(class="form-control is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for errors in form.item.errors %}
-                            {{ errors }}
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.item(class="form-control") }}
-                {% endif %}
+        <!-- <fieldset class="form-floating mb-3 mt-3"> -->
+        <legend class="border-bottom">New Inventory</legend>
+        <div class="form-floating mb-3 mt-3">
+            {% if form.item.errors %}
+            <input type="text" name="item" id="item" class="form-control is-invalid" placeholder="Name of Item">    
+            <label for="item">Name of Item</label>
+            <div class="invalid-feedback">
+                {% for errors in form.item.errors %}
+                    {{ errors }}
+                {% endfor %}
             </div>
+            {% else %}
+                <input type="text" name="item" id="item" class="form-control" placeholder="Name of Item">    
+                <label for="item">Name of Item</label>
+            {% endif %}
+        </div>
 
-            <div class="form-group">
-                {{ form.units.label(class="form-control-label") }}
-                {% if form.units.errors %}
-                    {{ form.units(class="form-control is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for errors in form.units.errors %}
-                            {{ errors }}
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.units(class="form-control") }}
-                {% endif %}
-            </div>
+        <div class="form-floating mb-3 mt-3">
+            {% if form.units.errors %}
+                <input type="number" name="units" id="units" class="form-control is-invalid" placeholder="No of Units">    
+                <label for="units">No of Units</label>
+                <div class="invalid-feedback">
+                    {% for errors in form.units.errors %}
+                        {{ errors }}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <input type="number" name="units" id="units" class="form-control" placeholder="No of Units">    
+                <label for="units">No of Units</label>
+            {% endif %}
+        </div>
 
-            <div class="form-group">
-                {{ form.description.label(class="form-control-label") }}
-                {% if form.description.errors %}
-                    {{ form.description(class="form-control is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for errors in form.description.errors %}
-                            {{ errors }}
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.description(class="form-control") }}
-                {% endif %}
-            </div>
-        </fieldset>
-        <div class="form-group mt-3">
+       
+        <div class="form-floating mb-3 mt-3">
+            {% if form.description.errors %}
+                <textarea name="description" id="description" cols="30" rows="10" placeholder="Description" class="form-control is-invalid"></textarea>
+                <label for="description">Description</label>
+                <div class="invalid-feedback">
+                    {% for errors in form.description.errors %}
+                        {{ errors }}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <textarea name="description" id="description" cols="30" rows="10" placeholder="Description" class="form-control"></textarea>  
+                <label for="description">Description</label>
+            {% endif %}
+        </div>
+        <!-- </fieldset> -->
+        <div class="form-floating mb-3 mt-3 mt-3">
             {{ form.submit(class = "btn btn-sm btn-outline-secondary") }}
         </div>
     </form>

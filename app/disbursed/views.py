@@ -111,7 +111,7 @@ def inventory_disbursed_full(start_date, end_date):
             outgoing_dict[disbursed.item] += disbursed.units
 
         
-    return render_template('total_disbursed.html', outgoing_dict=outgoing_dict)
+    return render_template('full_total_disbursed.html', outgoing_dict=outgoing_dict)
 
 
 @disbursed.route('/inventory/disburse/report')
@@ -120,6 +120,7 @@ def disbursed_summary():
     pagination = DisbursedInventory.query.paginate(page, per_page=current_app.config['RECORDS_PER_PAGE'], error_out=False)
     outgoing = pagination.items
 
+    print(request.cookies.get('start_date'))
     # a 0 value of filter indicates that record are not date filtered, we pass this value to the download function to indicate the kind of records to be downloaded
     resp = make_response(render_template('disbursed_summary.html', pagination=pagination, outgoing=outgoing, filter=0))
     resp.set_cookie('url', request.url)

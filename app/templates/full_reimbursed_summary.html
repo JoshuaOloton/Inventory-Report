@@ -30,7 +30,10 @@
       {% endfor %}
     </tbody>
   </table>
-  <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.download', process='reimburse', filter=filter) }}">Download</a>
+  <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.download', process='reimburse', filter=filter) }}">
+    <i class="bi bi-download"></i>
+    Download
+  </a>
   <!-- process value of disburse is passed to the download function to read the appopriate html table -->
 </div>
 

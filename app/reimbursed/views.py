@@ -6,6 +6,7 @@ from app.reimbursed import reimbursed
 from sqlalchemy import func, and_
 from datetime import datetime
 from flask_sqlalchemy import Pagination
+import re
 
 
 def format_date(date, format):
@@ -16,12 +17,34 @@ def format_date(date, format):
 def reimburse():
     form = NewInventoryForm()
     if form.validate_on_submit():
-        inventory = NewInventory(item=form.item.data.upper(), units=form.units.data, description=form.description.data)
+        # j = 1
+        data = form.item.data
+        print(f'Data 1: {data}')
+        for item in NewInventory.query.all():
+            if re.search(item.item.upper(),form.item.data.upper()) or re.search(form.item.data.upper(), item.item.upper()):
+                data = item.item
+                break
+        print(f'Data 2: {data}')
+            # j += 1
+        # if j >= NewInventory.query.count() and not (re.search(stock.item, form.item.data.upper()) or re.search(form.item.data.upper(), stock.item)):
+        #     inventory = NewInventory(item=item.item, units=form.units.data, description=form.description.data)
+        # else:
+        inventory = NewInventory(item=data.upper(), units=form.units.data, description=form.description.data)
+            
         if not form.description.data:
-            inventory.description = f'{form.units.data} units of {form.item.data}\'s'
+            inventory.description = f'{form.units.data} units of {form.item.data}'
         db.session.add(inventory)
         # increment no of units in stock
-        stock = InStock.query.filter_by(item=form.item.data.upper()).first()
+        i = 1
+        if InStock.query.count() > 0:
+            for stock in InStock.query.all():
+                if re.search(stock.item, form.item.data.upper()) or re.search(form.item.data.upper(), stock.item):
+                    break
+                i += 1
+            if i >= InStock.query.count() and not (re.search(stock.item, form.item.data.upper()) or re.search(form.item.data.upper(), stock.item)):
+                stock = None
+        else:
+            stock = None
         if not stock:
             stock = InStock(item=form.item.data.upper(), units=form.units.data)
             db.session.add(stock)

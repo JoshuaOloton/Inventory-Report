@@ -4,9 +4,9 @@
 
 <br>
 <div class="container report">
-    <h3>REPORT SUMMARY</h3>
+    <h3 id="click" >REPORT SUMMARY</h3>
     <!-- <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>             -->
-    <table class="table test">
+    <table id="hide" class="table test">
       <thead>
         <tr>
           <th>ITEM</th>
@@ -15,7 +15,7 @@
       </thead>
       <tbody>
         {% for stock in instock %}
-        <tr>
+        <tr id="ok" >
             <td>{{ stock.item }}</td>
             <td>
                 {% if stock.units == 0 %}
@@ -30,7 +30,9 @@
         {% endfor %}
       </tbody>
     </table>
-    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.report_summary') }}">View</a>
+    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.report_summary') }}">
+      <i class="bi bi-view-stacked"></i>
+      View</a>
   </div>
 
 <br>
@@ -57,7 +59,10 @@
         {% endfor %}
       </tbody>
     </table>
-    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('reimbursed.reimbursed_summary') }}">View</a>
+    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('reimbursed.reimbursed_summary') }}">
+      <i class="bi bi-view-stacked"></i>
+      View
+    </a>
   </div>
 
 <div class="container">
@@ -83,7 +88,10 @@
         {% endfor %}
       </tbody>
     </table>
-    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('disbursed.disbursed_summary') }}">View</a>
+    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('disbursed.disbursed_summary') }}">
+      <i class="bi bi-view-stacked"></i>
+      View
+    </a>
   </div>
 
 

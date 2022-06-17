@@ -5,9 +5,12 @@
 <br>
 <div class="container">
     <h4>TOTAL DISBURSED IN PERIOD</h4>
-      <input type="text" class="form-control search_item" placeholder="Search Items" onkeyup="myFunc()">
       <table class="table myTable">
         <thead>
+          <tr>
+            <th colspan="2">
+              <a id="send" href="{{ url_for('disbursed.inventory_disbursed_full', start_date=request.cookies.get('start_date', ''), end_date=request.cookies.get('end_date', '')) }}" style="text-decoration: none;"><input type="text" placeholder="Search Items" class="form-control" onkeyup="send()"></a>
+          </tr>
           <tr>
             <th>ITEM</th>
             <th>UNITS</th>
@@ -20,7 +23,10 @@
         </tr>
         {% endfor %}
       </table>
-      <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.download', process='outgoing', filter=1) }}">Download</a>
+      <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.download', process='outgoing', filter=1) }}">
+        <i class="bi bi-download"></i>
+        Download
+      </a>
   </div>
 
   {% if pagination.has_prev %}

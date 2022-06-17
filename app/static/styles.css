@@ -2,24 +2,12 @@ body {
     font-family: Arial, Helvetica, sans-serif;
   }
   
-.navbar {
-overflow: hidden;
-background-color: #333;
-}
-
-.navbar a {
-float: left;
-font-size: 16px;
-color: white;
-text-align: center;
-padding: 14px 16px;
-text-decoration: none;
-}
-
-
-
-.navbar a:hover {
-background-color: rgb(86, 83, 83);
+.content-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
 }
 
 .report {

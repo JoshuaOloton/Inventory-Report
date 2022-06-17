@@ -4,10 +4,10 @@ from app.models import NewInventory, DisbursedInventory, InStock
 from app.main.forms import ChooseDateForm
 from app import db
 from sqlalchemy import func, and_
-import pandas as pd
-from tkinter import Tk, filedialog
-import os
 from datetime import date, datetime
+import pandas as pd
+import numpy as np
+import os
 
 @main.route('/')
 @main.route('/report')
@@ -72,21 +72,22 @@ def report_period():
 
     format = "%m-%d-%y"
 
-    start_date = datetime.strptime(start_date, format).date()
-    end_date = datetime.strptime(end_date, format).date()
-
     # if both date limits are provided, filter between dates
     if start_date and end_date:
+        start_date = datetime.strptime(start_date, format).date()
+        end_date = datetime.strptime(end_date, format).date()
         if start_date > end_date:
             flash('Start date must be earlier than end date', 'danger')
         incoming = NewInventory.query.filter(and_(n_filtr >= start_date,n_filtr <= end_date)).all()
         outgoing = DisbursedInventory.query.filter(and_(d_filtr >= start_date, d_filtr <= end_date)).all()
     # if only end date is provided, filter out all queries after end date
     elif not start_date and end_date:
+        end_date = datetime.strptime(end_date, format).date()
         incoming = NewInventory.query.filter(n_filtr <= end_date).all()
         outgoing = DisbursedInventory.query.filter(d_filtr <= end_date).all()
     # if only start date is provided, filter out all queries before start date
     elif start_date and not end_date:
+        start_date = datetime.strptime(start_date, format).date()
         incoming = NewInventory.query.filter(n_filtr >= start_date).all()
         outgoing = DisbursedInventory.query.filter(d_filtr >= start_date).all()
     elif not start_date and not end_date:   # if both dates are skipped, then query all records
@@ -112,51 +113,41 @@ def report_period():
 @main.route('/download/<process>/<int:filter>')
 def download(process, filter):
     # dynamic route process value indicates wich route to read html tables from
-    root = Tk() # initialize Tk
-    root.withdraw() # hides small tkinter window
-    root.attributes('-topmost', True)
-
-    # base_url = 'http://127.0.0.1:5000'
+    
     url = request.cookies.get('url')
+    print(f'URL before: {url}')
+    if '?' in url:
+        index = url.index('?')
+        url = url[:index]
+    print(f'URL after: {url}')
+    print(f'URL FULL: {url}/full')
+    table = pd.read_html(f'{url}/full')[0]  # table is of type dataframe
+    table.index = np.arange(1, len(table)+1)
     
-    # these variables are used if filter is set to 1
-    # start_date = request.cookies.get('start_date')
-    # end_date = request.cookies.get('end_date')
-    print(f"URL: {url}")
+    path=os.path.expanduser("~")+'\Downloads'
     
-    # if process == 'reimburse':
-    #     if filter == 0:
-    #         next_url = '/inventory/new/report/full'
-    #     else:
-    #         next_url = f'/inventory/new/report/full/{start_date}/{end_date}'
-    # elif process == 'disburse':
-    #     if filter == 0:
-    #         next_url = '/inventory/disburse/report/full'
-    #     else:
-    #         next_url = f'/inventory/disburse/report/full/{start_date}/{end_date}'
-    # elif process == 'incoming':
-    #     next_url = f'/inventory/recieved/{start_date}/{end_date}/full'
-    # elif process == 'outgoing':
-    #     next_url = f'/inventory/disbursed/{start_date}/{end_date}/full'
-    # else: # report
-    #     next_url = '/report/summary/full'
+    if process == 'reimburse':
+        filename = 'reimbursed.xlsx'
+    elif process == 'disburse':
+        filename = 'disbursed.xlsx'
+    elif process == 'incoming':
+        filename = 'incoming_inventory.xlsx'
+    elif process == 'outgoing':
+        filename = 'disbursed_inventory.xlsx'
+    else:
+        filename = 'report.xlsx'
+    
+    format = '%d-%b-%y_%H.%M.%S'
+    now = datetime.now()
+    filename = now.strftime(format) + '_' + filename
 
-    table = pd.read_html(f'{url}/full')[0]
-    filename = filedialog.asksaveasfile(defaultextension=".xlsx", 
-                                        filetypes=[
-                                            ("Excel File", ".xlsx"),
-                                            ("CSV File", ".csv")
-                                        ])
-    try:
-        table.to_excel(f'{filename.name}')
-        flash(f'{os.path.basename(filename.name)}  successfully downloaded!', 'success')
-        root.destroy()
-    except AttributeError:
-        return redirect(url)
-    # close file
-    root.mainloop()
-    filename.close()
+    table.to_excel(f'{path}\{filename}')
+    flash(f'{filename} successfully downloaded!', 'success')
 
-    resp = make_response(redirect(url_for('main.report')))
+    if filter == 0:
+        resp = make_response(redirect(url_for('main.report')))
+    else:
+        resp = make_response(redirect(url_for('main.report_period')))
     resp.set_cookie('url', '', 0)   # clear url cookie
+    print(7)
     return resp

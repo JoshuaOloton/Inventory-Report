@@ -9,6 +9,11 @@
     <table class="table">
       <thead>
         <tr>
+          <th colspan="2">
+            <a href="{{ url_for('main.report_summary_full') }}" style="text-decoration: none;"><input type="text" placeholder="Search Items" class="form-control" onkeyup="send()"></a>
+          </th>
+        </tr>
+        <tr>
           <th>ITEMS</th>
           <th>UNITS IN STOCK</th>
         </tr>
@@ -32,37 +37,39 @@
     </table>
     
     <!-- process value of disburse is passed to the download function to read the appopriate html table -->
-    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.report_summary_full') }}">Search</a>
-    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.download', process='report', filter=filter) }}">Download</a>
-  </div>
+    <a class="btn btn-outline-secondary btn-sm mb-5" href="{{ url_for('main.download', process='report', filter=filter) }}">
+      <i class="bi bi-download"></i>
+      Download
+    </a>
 
-  <ul class="pagination">
+    <ul class="pagination">
 
-    {% if not pagination.has_prev %}
-      <li class="page-item disabled"><a class="page-link" href="{{ url_for('main.report_summary', page=pagination.prev_num) }}">&laquo;</a></li>
-    {% else %}
-      <li class="page-item"><a class="page-link" href="{{ url_for('main.report_summary', page=pagination.prev_num) }}">&laquo;</a></li>
-    {% endif %}
-    
-  
-    {% for page_no in pagination.iter_pages(left_edge=1,right_edge=1,left_current=2,right_current=2) %}
-      {% if page_no %}
-        {% if page_no == pagination.page %}
-          <li class="page-item active"><a class="page-link" href="{{ url_for('main.report_summary', page=page_no) }}">{{ page_no }}</a></li>
-        {% else %}
-          <li class="page-item"><a class="page-link" href="{{ url_for('main.report_summary', page=page_no) }}">{{ page_no }}</a></li>
-        {% endif %}
+      {% if not pagination.has_prev %}
+        <li class="page-item disabled"><a class="page-link" href="{{ url_for('main.report_summary', page=pagination.prev_num) }}">&laquo;</a></li>
       {% else %}
-        &hellip;
+        <li class="page-item"><a class="page-link" href="{{ url_for('main.report_summary', page=pagination.prev_num) }}">&laquo;</a></li>
       {% endif %}
-    {% endfor %}
-  
+      
     
-    {% if not pagination.has_next %}
-      <li class="page-item disabled"><a class="page-link" href="{{ url_for('main.report_summary', page=pagination.next_num) }}">&raquo;</a></li>
-    {% else %}
-      <li class="page-item" ><a class="page-link" href="{{ url_for('main.report_summary', page=pagination.next_num) }}">&raquo;</a></li>
-    {% endif %}
-  </ul>
+      {% for page_no in pagination.iter_pages(left_edge=1,right_edge=1,left_current=2,right_current=2) %}
+        {% if page_no %}
+          {% if page_no == pagination.page %}
+            <li class="page-item active"><a class="page-link" href="{{ url_for('main.report_summary', page=page_no) }}">{{ page_no }}</a></li>
+          {% else %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('main.report_summary', page=page_no) }}">{{ page_no }}</a></li>
+          {% endif %}
+        {% else %}
+          &hellip;
+        {% endif %}
+      {% endfor %}
+    
+      
+      {% if not pagination.has_next %}
+        <li class="page-item disabled"><a class="page-link" href="{{ url_for('main.report_summary', page=pagination.next_num) }}">&raquo;</a></li>
+      {% else %}
+        <li class="page-item" ><a class="page-link" href="{{ url_for('main.report_summary', page=pagination.next_num) }}">&raquo;</a></li>
+      {% endif %}
+    </ul>
+  </div>
 
 {% endblock %}
